@@ -3,1121 +3,1196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PRU ACADEMY - Meet the Coach</title>
+    <title>PRU Academy - Modern Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --fb-blue: #1877F2;
-            --fb-blue-dark: #166FE5;
-            --fb-bg: #F0F2F5;
-            --fb-card-bg: #FFFFFF;
-            --fb-text: #1C1E21;
-            --fb-text-secondary: #65676B;
-            --fb-border: #DDDFE2;
-            --fb-green: #42B883;
-            --fb-purple: #8A2BE2;
+            --neon-cyan: #00FFFF;
+            --neon-magenta: #FF00FF;
+            --neon-green: #00FF00;
+            --neon-blue: #0096FF;
+            --neon-yellow: #FFFF00;
+            --dark-bg: #0A0A0A;
+            --card-bg: #1A1A1A;
+            --card-border: #2A2A2A;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B0B0B0;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background-color: var(--fb-bg);
-            color: var(--fb-text);
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        /* Header Facebook Style */
-        .header {
-            background-color: var(--fb-card-bg);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            padding: 0 16px;
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
         }
 
-        .header-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            max-width: 1200px;
-            margin: 0 auto;
-            height: 56px;
+        /* Sidebar */
+        .sidebar {
+            background: linear-gradient(180deg, #0A0A0A 0%, #1A1A2E 100%);
+            padding: 20px;
+            border-right: 1px solid var(--card-border);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--fb-blue);
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--card-border);
         }
 
         .logo i {
-            margin-right: 8px;
+            font-size: 24px;
+            color: var(--neon-cyan);
+            margin-right: 10px;
         }
 
-        .nav-menu {
-            display: flex;
-            gap: 8px;
-        }
-
-        .nav-item {
-            padding: 12px 40px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--fb-text-secondary);
-            transition: all 0.2s;
-            position: relative;
-        }
-
-        .nav-item.active {
-            color: var(--fb-blue);
-        }
-
-        .nav-item.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background-color: var(--fb-blue);
-            border-radius: 3px 3px 0 0;
-        }
-
-        .nav-item:hover {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
-
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--fb-blue), var(--fb-purple));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* Main Content */
-        .container {
-            display: flex;
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 16px;
-            gap: 20px;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 280px;
-            flex-shrink: 0;
-        }
-
-        .sidebar-card {
-            background-color: var(--fb-card-bg);
-            border-radius: 8px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-            padding: 16px;
-            margin-bottom: 16px;
+        .logo h1 {
+            font-size: 20px;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .user-profile {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid var(--fb-border);
-            margin-bottom: 16px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(26, 26, 26, 0.7);
+            border-radius: 10px;
+            border: 1px solid var(--card-border);
         }
 
-        .user-profile .avatar {
-            width: 48px;
-            height: 48px;
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-magenta));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            box-shadow: 0 0 10px var(--neon-cyan);
         }
 
         .user-info h3 {
             font-size: 16px;
-            margin-bottom: 4px;
+            margin-bottom: 5px;
         }
 
         .user-info p {
-            font-size: 14px;
-            color: var(--fb-text-secondary);
+            font-size: 12px;
+            color: var(--text-secondary);
         }
 
-        .sidebar-menu {
+        .nav-menu {
             list-style: none;
         }
 
-        .sidebar-menu li {
-            padding: 10px;
+        .nav-item {
+            padding: 12px 15px;
+            margin-bottom: 8px;
             border-radius: 8px;
             cursor: pointer;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 4px;
-            transition: background-color 0.2s;
         }
 
-        .sidebar-menu li:hover {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
-
-        .sidebar-menu li.active {
-            background-color: rgba(24, 119, 242, 0.1);
-            color: var(--fb-blue);
-            font-weight: 600;
-        }
-
-        .sidebar-menu li i {
+        .nav-item i {
+            margin-right: 10px;
             width: 20px;
             text-align: center;
         }
 
-        /* Feed/Content Area */
-        .content {
-            flex: 1;
+        .nav-item.active {
+            background: rgba(0, 255, 255, 0.1);
+            color: var(--neon-cyan);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
         }
 
-        .content-card {
-            background-color: var(--fb-card-bg);
-            border-radius: 8px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-            margin-bottom: 16px;
-            overflow: hidden;
+        .nav-item:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.05);
         }
 
-        .card-header {
-            padding: 16px;
-            border-bottom: 1px solid var(--fb-border);
+        /* Main Content */
+        .main-content {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--card-border);
         }
 
-        .card-title {
+        .header h2 {
+            font-size: 24px;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 10px 15px 10px 40px;
+            color: var(--text-primary);
+            width: 250px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .notification {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--card-bg);
+            border-radius: 50%;
+            cursor: pointer;
+            border: 1px solid var(--card-border);
+        }
+
+        .notification::after {
+            content: '3';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--neon-magenta);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 255, 255, 0.1);
+        }
+
+        .stat-card:nth-child(2)::before {
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan));
+        }
+
+        .stat-card:nth-child(3)::before {
+            background: linear-gradient(90deg, var(--neon-magenta), var(--neon-blue));
+        }
+
+        .stat-card:nth-child(4)::before {
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .stat-card:nth-child(1) .stat-icon {
+            background: rgba(0, 255, 255, 0.1);
+            color: var(--neon-cyan);
+        }
+
+        .stat-card:nth-child(2) .stat-icon {
+            background: rgba(0, 255, 0, 0.1);
+            color: var(--neon-green);
+        }
+
+        .stat-card:nth-child(3) .stat-icon {
+            background: rgba(255, 0, 255, 0.1);
+            color: var(--neon-magenta);
+        }
+
+        .stat-card:nth-child(4) .stat-icon {
+            background: rgba(0, 150, 255, 0.1);
+            color: var(--neon-blue);
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .stat-change {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+
+        .stat-change.positive {
+            color: var(--neon-green);
+        }
+
+        .stat-change.negative {
+            color: var(--neon-magenta);
+        }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-title {
             font-size: 18px;
             font-weight: 600;
         }
 
-        .card-body {
-            padding: 16px;
+        .chart-actions {
+            display: flex;
+            gap: 10px;
         }
 
-        /* Coach Grid */
-        .coach-grid {
+        .chart-actions button {
+            background: transparent;
+            border: 1px solid var(--card-border);
+            color: var(--text-secondary);
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .chart-actions button:hover {
+            color: var(--neon-cyan);
+            border-color: var(--neon-cyan);
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+
+        /* Coaches Grid */
+        .coaches-section {
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .view-all {
+            color: var(--neon-cyan);
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .coaches-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
         }
 
         .coach-card {
-            border-radius: 8px;
+            background: var(--card-bg);
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-            background: white;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
         .coach-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 255, 255, 0.1);
         }
 
         .coach-header {
-            background: linear-gradient(135deg, var(--fb-blue), var(--fb-purple));
-            padding: 16px;
-            text-align: center;
-            color: white;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1));
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         .coach-avatar {
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            margin: 0 auto 12px;
-            background: rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-magenta));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
         }
 
-        .coach-name {
-            font-weight: 600;
-            font-size: 16px;
-            margin-bottom: 4px;
+        .coach-info h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
         }
 
-        .coach-region {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        .coach-info {
-            padding: 12px;
-        }
-
-        .coach-info-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
+        .coach-info p {
+            color: var(--text-secondary);
             font-size: 14px;
         }
 
-        .coach-info-item i {
-            width: 16px;
-            color: var(--fb-text-secondary);
+        .coach-details {
+            padding: 15px 20px;
         }
 
-        /* Forms */
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--fb-text);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--fb-border);
-            border-radius: 6px;
-            font-size: 15px;
-            transition: border-color 0.2s;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--fb-blue);
-        }
-
-        .btn {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background-color: var(--fb-blue);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--fb-blue-dark);
-        }
-
-        .btn-block {
-            display: block;
-            width: 100%;
-        }
-
-        /* Tabs */
-        .tabs {
+        .coach-detail {
             display: flex;
-            border-bottom: 1px solid var(--fb-border);
-            margin-bottom: 16px;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 14px;
         }
 
-        .tab {
-            padding: 12px 24px;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--fb-text-secondary);
-            border-bottom: 3px solid transparent;
-            transition: all 0.2s;
+        .coach-detail i {
+            width: 20px;
+            margin-right: 10px;
+            color: var(--neon-cyan);
         }
 
-        .tab.active {
-            color: var(--fb-blue);
-            border-bottom-color: var(--fb-blue);
+        .coach-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--card-border);
         }
 
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Dashboard Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            background-color: var(--fb-card-bg);
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        .stat {
             text-align: center;
         }
 
         .stat-value {
-            font-size: 32px;
+            font-size: 18px;
             font-weight: bold;
-            color: var(--fb-blue);
-            margin-bottom: 8px;
+            display: block;
         }
 
         .stat-label {
-            color: var(--fb-text-secondary);
-            font-size: 14px;
+            font-size: 12px;
+            color: var(--text-secondary);
         }
 
-        /* Post/Question Cards */
-        .post-card {
-            background-color: var(--fb-card-bg);
-            border-radius: 8px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-            margin-bottom: 16px;
-            padding: 16px;
-        }
-
-        .post-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .post-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--fb-green), var(--fb-blue));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-
-        .post-user {
-            font-weight: 600;
-        }
-
-        .post-time {
-            color: var(--fb-text-secondary);
-            font-size: 14px;
-        }
-
-        .post-content {
-            margin-bottom: 12px;
-        }
-
-        .post-actions {
-            display: flex;
-            gap: 16px;
-            padding-top: 12px;
-            border-top: 1px solid var(--fb-border);
-        }
-
-        .post-action {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--fb-text-secondary);
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .post-action:hover {
-            color: var(--fb-blue);
+        /* Additional Chart Styles */
+        .charts-grid-secondary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
         }
 
         /* Responsive */
-        @media (max-width: 900px) {
-            .container {
-                flex-direction: column;
+        @media (max-width: 1200px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .charts-grid-secondary {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
             }
             
             .sidebar {
-                width: 100%;
+                display: none;
             }
             
-            .nav-menu {
-                display: none;
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .coaches-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-box input {
+                width: 150px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-container">
-            <div class="logo">
-                <i class="fas fa-graduation-cap"></i>
-                <span>PRU Academy</span>
-            </div>
-            
-            <div class="nav-menu">
-                <div class="nav-item active" data-tab="dashboard">
-                    <i class="fas fa-home"></i>
-                    <span>แดชบอร์ด</span>
-                </div>
-                <div class="nav-item" data-tab="meet-coach">
-                    <i class="fas fa-users"></i>
-                    <span>Meet the Coach</span>
-                </div>
-                <div class="nav-item" data-tab="search">
-                    <i class="fas fa-search"></i>
-                    <span>ค้นหา</span>
-                </div>
-                <div class="nav-item" data-tab="qa">
-                    <i class="fas fa-question-circle"></i>
-                    <span>Q&A Board</span>
-                </div>
-            </div>
-            
-            <div class="user-menu">
-                <div class="avatar">AR</div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <div class="container">
+    <div class="dashboard-container">
         <!-- Sidebar -->
         <div class="sidebar">
-            <div class="sidebar-card">
-                <div class="user-profile">
-                    <div class="avatar">AR</div>
-                    <div class="user-info">
-                        <h3>ARMAUI</h3>
-                        <p>Training Specialist</p>
-                    </div>
-                </div>
-                
-                <ul class="sidebar-menu">
-                    <li class="active" data-tab="dashboard">
-                        <i class="fas fa-home"></i>
-                        <span>แดชบอร์ด</span>
-                    </li>
-                    <li data-tab="meet-coach">
-                        <i class="fas fa-users"></i>
-                        <span>Meet the Coach</span>
-                    </li>
-                    <li data-tab="search">
-                        <i class="fas fa-search"></i>
-                        <span>ค้นหาข้อมูลลูกค้า</span>
-                    </li>
-                    <li data-tab="qa">
-                        <i class="fas fa-question-circle"></i>
-                        <span>Q&A Board</span>
-                    </li>
-                    <li data-tab="profile">
-                        <i class="fas fa-user-circle"></i>
-                        <span>โปรไฟล์ของฉัน</span>
-                    </li>
-                    <li data-tab="settings">
-                        <i class="fas fa-cog"></i>
-                        <span>การตั้งค่า</span>
-                    </li>
-                </ul>
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <h1>PRU Academy</h1>
             </div>
             
-            <div class="sidebar-card">
-                <h3 style="margin-bottom: 12px;">โค้ชของฉัน</h3>
-                <div class="coach-list">
-                    <div class="coach-info-item">
-                        <i class="fas fa-user-tie"></i>
-                        <span>Yamapat [Arm]</span>
-                    </div>
-                    <div class="coach-info-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Region 5</span>
-                    </div>
-                    <div class="coach-info-item">
-                        <i class="fas fa-envelope"></i>
-                        <span>yamapat@email.com</span>
-                    </div>
+            <div class="user-profile">
+                <div class="avatar">ญ</div>
+                <div class="user-info">
+                    <h3>ญานภัทร จ.</h3>
+                    <p>Master / Coach</p>
                 </div>
             </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item active">
+                    <i class="fas fa-home"></i>
+                    <span>แดชบอร์ด</span>
+                </li>
+                <li class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>วิเคราะห์ข้อมูล</span>
+                </li>
+                <li class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>จัดการโค้ช</span>
+                </li>
+                <li class="nav-item">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>ผู้เข้าร่วม</span>
+                </li>
+                <li class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>การตั้งค่า</span>
+                </li>
+                <li class="nav-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>ช่วยเหลือ</span>
+                </li>
+            </ul>
         </div>
         
-        <!-- Content Area -->
-        <div class="content">
-            <!-- Dashboard Tab -->
-            <div class="tab-content active" id="dashboard">
-                <div class="content-card">
-                    <div class="card-header">
-                        <div class="card-title">ภาพรวมการฝึกอบรม</div>
-                        <div class="card-actions">
-                            <button class="btn btn-primary">
-                                <i class="fas fa-download"></i>
-                                <span>Export</span>
-                            </button>
-                        </div>
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h2>ภาพรวมระบบโค้ช</h2>
+                <div class="header-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="ค้นหา...">
                     </div>
-                    
-                    <div class="card-body">
-                        <div class="stats-grid">
-                            <div class="stat-card">
-                                <div class="stat-value">14</div>
-                                <div class="stat-label">คลาสฝึกอบรมทั้งหมด</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-value">254</div>
-                                <div class="stat-label">ผู้เข้าร่วมทั้งหมด</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-value">4</div>
-                                <div class="stat-label">คลาสแบบพบหน้า</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-value">4</div>
-                                <div class="stat-label">คลาสออนไลน์</div>
-                            </div>
-                        </div>
-                        
-                        <div class="tabs">
-                            <div class="tab active" data-subtab="regions">แบ่งตามภูมิภาค</div>
-                            <div class="tab" data-subtab="upcoming">กิจกรรมที่จะเกิดขึ้น</div>
-                        </div>
-                        
-                        <div class="subtab-content active" id="regions">
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                                <div>
-                                    <h4 style="margin-bottom: 12px;">ภูมิภาค</h4>
-                                    <div style="display: flex; flex-direction: column; gap: 8px;">
-                                        <div style="display: flex; justify-content: space-between; padding: 8px; background: var(--fb-bg); border-radius: 6px;">
-                                            <span>RH 1</span>
-                                            <span>4 Bias 15 participants</span>
-                                        </div>
-                                        <div style="display: flex; justify-content: space-between; padding: 8px; background: var(--fb-bg); border-radius: 6px;">
-                                            <span>RH 2</span>
-                                            <span>4 Bias 15 participants</span>
-                                        </div>
-                                        <div style="display: flex; justify-content: space-between; padding: 8px; background: var(--fb-bg); border-radius: 6px;">
-                                            <span>RH 3</span>
-                                            <span>4 Bias 15 participants</span>
-                                        </div>
-                                        <div style="display: flex; justify-content: space-between; padding: 8px; background: var(--fb-bg); border-radius: 6px;">
-                                            <span>RH 4</span>
-                                            <span>4 Bias 15 participants</span>
-                                        </div>
-                                        <div style="display: flex; justify-content: space-between; padding: 8px; background: var(--fb-bg); border-radius: 6px;">
-                                            <span>RH 5</span>
-                                            <span>4 Bias 15 participants</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div>
-                                    <h4 style="margin-bottom: 12px;">ประเภทคลาส</h4>
-                                    <div style="display: flex; flex-direction: column; gap: 8px;">
-                                        <div style="display: flex; justify-content: space-between; padding: 8px; background: var(--fb-bg); border-radius: 6px;">
-                                            <span>BM</span>
-                                            <span>13 คลาส</span>
-                                        </div>
-                                        <div style="display: flex; justify-content: space-between; padding: 8px; background: var(--fb-bg); border-radius: 6px;">
-                                            <span>CISA</span>
-                                            <span>8 คลาส</span>
-                                        </div>
-                                        <div style="display: flex; justify-content: space-between; padding: 8px; background: var(--fb-bg); border-radius: 6px;">
-                                            <span>CFSA</span>
-                                            <span>0 คลาส</span>
-                                        </div>
-                                        <div style="display: flex; justify-content: space-between; padding: 8px; background: var(--fb-bg); border-radius: 6px;">
-                                            <span>อื่นๆ</span>
-                                            <span>10 คลาส</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="subtab-content" id="upcoming">
-                            <div style="display: flex; flex-direction: column; gap: 12px;">
-                                <div style="display: flex; justify-content: space-between; padding: 12px; background: var(--fb-bg); border-radius: 8px;">
-                                    <div>
-                                        <div style="font-weight: 600;">BM</div>
-                                        <div style="font-size: 14px; color: var(--fb-text-secondary);">Region 1-5</div>
-                                    </div>
-                                    <div style="font-weight: 600;">4 คลาส</div>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; padding: 12px; background: var(--fb-bg); border-radius: 8px;">
-                                    <div>
-                                        <div style="font-weight: 600;">CISA CFSA</div>
-                                        <div style="font-size: 14px; color: var(--fb-text-secondary);">Region 2, 4</div>
-                                    </div>
-                                    <div style="font-weight: 600;">4 คลาส</div>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; padding: 12px; background: var(--fb-bg); border-radius: 8px;">
-                                    <div>
-                                        <div style="font-weight: 600;">อื่นๆ</div>
-                                        <div style="font-size: 14px; color: var(--fb-text-secondary);">Region 3, 5</div>
-                                    </div>
-                                    <div style="font-weight: 600;">4 คลาส</div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="notification">
+                        <i class="fas fa-bell"></i>
                     </div>
                 </div>
             </div>
             
-            <!-- Meet the Coach Tab -->
-            <div class="tab-content" id="meet-coach">
-                <div class="content-card">
-                    <div class="card-header">
-                        <div class="card-title">Meet the Coach</div>
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
                     </div>
-                    
-                    <div class="card-body">
-                        <p style="margin-bottom: 16px;">เลือกโค้ชที่ต้องการขอคำปรึกษาและกรอกข้อมูลลูกค้าของคุณ</p>
-                        
-                        <div class="coach-grid">
-                            <!-- Coach 1 -->
-                            <div class="coach-card" data-coach="coach1">
-                                <div class="coach-header">
-                                    <div class="coach-avatar">
-                                        <i class="fas fa-user-tie"></i>
-                                    </div>
-                                    <div class="coach-name">Yamapat [Arm]</div>
-                                    <div class="coach-region">Region 5</div>
-                                </div>
-                                <div class="coach-info">
-                                    <div class="coach-info-item">
-                                        <i class="fas fa-briefcase"></i>
-                                        <span>Manager Training Specialist</span>
-                                    </div>
-                                    <div class="coach-info-item">
-                                        <i class="fas fa-star"></i>
-                                        <span>4.8 (124 reviews)</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Coach 2 -->
-                            <div class="coach-card" data-coach="coach2">
-                                <div class="coach-header">
-                                    <div class="coach-avatar">
-                                        <i class="fas fa-user-tie"></i>
-                                    </div>
-                                    <div class="coach-name">Sarah Johnson</div>
-                                    <div class="coach-region">Region 3</div>
-                                </div>
-                                <div class="coach-info">
-                                    <div class="coach-info-item">
-                                        <i class="fas fa-briefcase"></i>
-                                        <span>Senior Training Specialist</span>
-                                    </div>
-                                    <div class="coach-info-item">
-                                        <i class="fas fa-star"></i>
-                                        <span>4.7 (98 reviews)</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Add more coaches as needed -->
-                        </div>
+                    <div class="stat-value">1,542</div>
+                    <div class="stat-label">ผู้เข้าร่วมทั้งหมด</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>15% จากเดือนที่แล้ว</span>
                     </div>
                 </div>
                 
-                <!-- Customer Form -->
-                <div class="content-card" id="customer-form" style="display: none;">
-                    <div class="card-header">
-                        <div class="card-title">กรอกข้อมูลลูกค้า</div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
                     </div>
-                    
-                    <div class="card-body">
-                        <form id="customerDataForm">
-                            <div class="form-group">
-                                <label class="form-label" for="employeeName">ชื่อพนักงาน</label>
-                                <input type="text" class="form-control" id="employeeName" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="customerName">ชื่อลูกค้า</label>
-                                <input type="text" class="form-control" id="customerName" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="customerDetails">รายละเอียดลูกค้า</label>
-                                <textarea class="form-control" id="customerDetails" rows="4" placeholder="กรอกรายละเอียดเกี่ยวกับลูกค้า..."></textarea>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="coachRegion">ภูมิภาคโค้ช</label>
-                                <select class="form-control" id="coachRegion" required>
-                                    <option value="">เลือกภูมิภาค</option>
-                                    <option value="RH1">Region 1</option>
-                                    <option value="RH2">Region 2</option>
-                                    <option value="RH3">Region 3</option>
-                                    <option value="RH4">Region 4</option>
-                                    <option value="RH5">Region 5</option>
-                                </select>
-                            </div>
-                            
-                            <button type="submit" class="btn btn-primary btn-block">
-                                <i class="fas fa-paper-plane"></i>
-                                <span>ส่งข้อมูล</span>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Search Tab -->
-            <div class="tab-content" id="search">
-                <div class="content-card">
-                    <div class="card-header">
-                        <div class="card-title">ค้นหาข้อมูลลูกค้า</div>
-                    </div>
-                    
-                    <div class="card-body">
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="searchInput" placeholder="ค้นหาด้วยชื่อลูกค้าหรือรหัสลูกค้า...">
-                        </div>
-                        
-                        <div id="searchResults">
-                            <!-- Search results will appear here -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Q&A Board Tab -->
-            <div class="tab-content" id="qa">
-                <div class="content-card">
-                    <div class="card-header">
-                        <div class="card-title">Q&A Board</div>
-                    </div>
-                    
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label class="form-label" for="questionType">ประเภทกระทู้</label>
-                            <select class="form-control" id="questionType">
-                                <option value="question">คำถาม</option>
-                                <option value="feedback">Feedback</option>
-                                <option value="suggestion">ข้อเสนอแนะ</option>
-                                <option value="other">อื่นๆ</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="employeeNameQ">ชื่อพนักงาน (ไม่จำเป็นต้องใช้ชื่อจริง)</label>
-                            <input type="text" class="form-control" id="employeeNameQ" placeholder="กรอกชื่อที่ต้องการแสดง">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="questionText">ข้อความ</label>
-                            <textarea class="form-control" id="questionText" rows="4" placeholder="ระบุคำถามหรือ feedback ของคุณ..."></textarea>
-                        </div>
-                        
-                        <button class="btn btn-primary" id="submitQuestion">
-                            <i class="fas fa-share"></i>
-                            <span>ส่งคำถาม</span>
-                        </button>
+                    <div class="stat-value">86</div>
+                    <div class="stat-label">เซสชันโค้ช</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>8% จากเดือนที่แล้ว</span>
                     </div>
                 </div>
                 
-                <div id="questionsList">
-                    <!-- Questions will appear here -->
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-value">4.7</div>
+                    <div class="stat-label">คะแนนเฉลี่ย</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>0.3 จากเดือนที่แล้ว</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="stat-value">92%</div>
+                    <div class="stat-label">อัตราการสำเร็จ</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>5% จากเดือนที่แล้ว</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts Grid -->
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">ประสิทธิภาพโค้ชตามภูมิภาค</div>
+                        <div class="chart-actions">
+                            <button>เดือน</button>
+                            <button>ไตรมาส</button>
+                            <button>ปี</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">การกระจายตัวผู้เข้าร่วม</div>
+                        <div class="chart-actions">
+                            <button>ดูทั้งหมด</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="distributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Additional Charts -->
+            <div class="charts-grid-secondary">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">อัตราความสำเร็จตามประเภท</div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="successRateChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">แนวโน้มการเติบโต</div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="growthChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Coaches Section -->
+            <div class="coaches-section">
+                <div class="section-header">
+                    <div class="section-title">ทีมโค้ชทั้งหมด (6 คน)</div>
+                    <a href="#" class="view-all">
+                        <span>ดูทั้งหมด</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+                
+                <div class="coaches-grid">
+                    <!-- Coach 1: ญานภัทร จารุวงศ์ไพบูลย์ -->
+                    <div class="coach-card">
+                        <div class="coach-header">
+                            <div class="coach-avatar">ญ</div>
+                            <div class="coach-info">
+                                <h3>ญานภัทร จารุวงศ์ไพบูลย์</h3>
+                                <p>Master / Coach</p>
+                            </div>
+                        </div>
+                        <div class="coach-details">
+                            <div class="coach-detail">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>ภูมิภาค: RH5</span>
+                            </div>
+                            <div class="coach-detail">
+                                <i class="fas fa-envelope"></i>
+                                <span>yannapat.prudential@gmail.com</span>
+                            </div>
+                            <div class="coach-detail">
+                                <i class="fas fa-user-tag"></i>
+                                <span>User: ttb_yj</span>
+                            </div>
+                            <div class="coach-stats">
+                                <div class="stat">
+                                    <span class="stat-value">48</span>
+                                    <span class="stat-label">เซสชัน</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">4.9</span>
+                                    <span class="stat-label">คะแนน</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">96%</span>
+                                    <span class="stat-label">สำเร็จ</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Coach 2: อรรถพันธ์ สุวรรณประดิษฐ์ -->
+                    <div class="coach-card">
+                        <div class="coach-header">
+                            <div class="coach-avatar">อ</div>
+                            <div class="coach-info">
+                                <h3>อรรถพันธ์ สุวรรณประดิษฐ์</h3>
+                                <p>Coach</p>
+                            </div>
+                        </div>
+                        <div class="coach-details">
+                            <div class="coach-detail">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>ภูมิภาค: RH4</span>
+                            </div>
+                            <div class="coach-detail">
+                                <i class="fas fa-envelope"></i>
+                                <span>arthaphs@gmail.com</span>
+                            </div>
+                            <div class="coach-detail">
+                                <i class="fas fa-user-tag"></i>
+                                <span>User: ttb_as</span>
+                            </div>
+                            <div class="coach-stats">
+                                <div class="stat">
+                                    <span class="stat-value">42</span>
+                                    <span class="stat-label">เซสชัน</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">4.7</span>
+                                    <span class="stat-label">คะแนน</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">89%</span>
+                                    <span class="stat-label">สำเร็จ</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Coach 3: ณัฐกนิษฐ์ จริยะดิลก -->
+                    <div class="coach-card">
+                        <div class="coach-header">
+                            <div class="coach-avatar">ณ</div>
+                            <div class="coach-info">
+                                <h3>ณัฐกนิษฐ์ จริยะดิลก</h3>
+                                <p>Coach</p>
+                            </div>
+                        </div>
+                        <div class="coach-details">
+                            <div class="coach-detail">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>ภูมิภาค: RH1</span>
+                            </div>
+                            <div class="coach-detail">
+                                <i class="fas fa-envelope"></i>
+                                <span>natkanitjariyadilok@gmail.com</span>
+                            </div>
+                            <div class="coach-detail">
+                                <i class="fas fa-user-tag"></i>
+                                <span>User: ttb_nj</span>
+                            </div>
+                            <div class="coach-stats">
+                                <div class="stat">
+                                    <span class="stat-value">39</span>
+                                    <span class="stat-label">เซสชัน</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">4.8</span>
+                                    <span class="stat-label">คะแนน</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">92%</span>
+                                    <span class="stat-label">สำเร็จ</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Coach 4: พชร ภัทรตริรักษ์ -->
+                    <div class="coach-card">
+                        <div class="coach-header">
+                            <div class="coach-avatar">พ</div>
+                            <div class="coach-info">
+                                <h3>พชร ภัทรตริรักษ์</h3>
+                                <p>Coach</p>
+                            </div>
+                        </div>
+                        <div class="coach-details">
+                            <div class="coach-detail">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>ภูมิภาค: RH2</span>
+                            </div>
+                            <div class="coach-detail">
+                                <i class="fas fa-envelope"></i>
+                                <span>greatkaloo@gmail.com</span>
+                            </div>
+                            <div class="coach-detail">
+                                <i class="fas fa-user-tag"></i>
+                                <span>User: ttb_pp</span>
+                            </div>
+                            <div class="coach-stats">
+                                <div class="stat">
+                                    <span class="stat-value">36</span>
+                                    <span class="stat-label">เซสชัน</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">4.6</span>
+                                    <span class="stat-label">คะแนน</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">88%</span>
+                                    <span class="stat-label">สำเร็จ</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Coach 5: ธนยศ เทียมเศวษ -->
+                    <div class="coach-card">
+                        <div class="coach-header">
+                            <div class="coach-avatar">ธ</div>
+                            <div class="coach-info">
+                                <h3>ธนยศ เทียมเศวษ</h3>
+                                <p>Coach</p>
+                            </div>
+                        </div>
+                        <div class="coach-details">
+                            <div class="coach-detail">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>ภูมิภาค: RH4</span>
+                            </div>
+                            <div class="coach-detail">
+                                <i class="fas fa-envelope"></i>
+                                <span>thanayot.calendar@gmail.com</span>
+                            </div>
+                            <div class="coach-detail">
+                                <i class="fas fa-user-tag"></i>
+                                <span>User: ttb_tt</span>
+                            </div>
+                            <div class="coach-stats">
+                                <div class="stat">
+                                    <span class="stat-value">41</span>
+                                    <span class="stat-label">เซสชัน</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">4.7</span>
+                                    <span class="stat-label">คะแนน</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">90%</span>
+                                    <span class="stat-label">สำเร็จ</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Coach 6: วัฒนพันธ์ ชัยพูล -->
+                    <div class="coach-card">
+                        <div class="coach-header">
+                            <div class="coach-avatar">ว</div>
+                            <div class="coach-info">
+                                <h3>วัฒนพันธ์ ชัยพูล</h3>
+                                <p>Coach</p>
+                            </div>
+                        </div>
+                        <div class="coach-details">
+                            <div class="coach-detail">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>ภูมิภาค: RH3</span>
+                            </div>
+                            <div class="coach-detail">
+                                <i class="fas fa-envelope"></i>
+                                <span>wattanapan.ch@gmail.com</span>
+                            </div>
+                            <div class="coach-detail">
+                                <i class="fas fa-user-tag"></i>
+                                <span>User: ttb_wc</span>
+                            </div>
+                            <div class="coach-stats">
+                                <div class="stat">
+                                    <span class="stat-value">37</span>
+                                    <span class="stat-label">เซสชัน</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">4.5</span>
+                                    <span class="stat-label">คะแนน</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">87%</span>
+                                    <span class="stat-label">สำเร็จ</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // ข้อมูลตัวอย่าง
-        const sampleData = {
-            customers: [
-                {
-                    id: 'C202503201430',
-                    employeeName: 'สมชาย ใจดี',
-                    customerName: 'นายก้อง เก่งกิจ',
-                    customerDetails: 'ลูกค้าสนใจผลิตภัณฑ์ประกันชีวิตแบบบำนาญ อายุ 35 ปี รายได้ 50,000 บาท/เดือน',
-                    region: 'RH5',
-                    timestamp: '2025-03-20 14:30:00',
-                    status: 'pending',
-                    coach: 'coach_arm'
-                }
-            ],
-            questions: [
-                {
-                    id: 'Q202503201431',
-                    employeeName: 'สมชาย',
-                    type: 'question',
-                    question: 'วิธีวิเคราะห์ข้อมูลลูกค้ายังไง?',
-                    timestamp: '2025-03-20 14:31:00',
-                    status: 'pending',
-                    answer: '',
-                    answeredBy: ''
-                }
-            ],
-            coaches: [
-                {
-                    id: 'coach_arm',
-                    name: 'Yamapat [Arm]',
-                    region: 'RH5',
-                    email: 'yamapat@email.com',
-                    phone: '085-018-8885',
-                    position: 'Manager Training Specialist'
-                }
-            ]
-        };
-
-        // ฟังก์ชันจัดการแท็บ
-        function initTabs() {
-            // ตั้งค่าแท็บหลัก
-            const tabItems = document.querySelectorAll('.nav-item, .sidebar-menu li');
-            tabItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    const tabId = this.getAttribute('data-tab');
-                    
-                    // อัพเดทสถานะ active
-                    tabItems.forEach(tab => tab.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // แสดงเนื้อหาแท็บที่เลือก
-                    document.querySelectorAll('.tab-content').forEach(content => {
-                        content.classList.remove('active');
-                    });
-                    document.getElementById(tabId).classList.add('active');
-                    
-                    // ถ้าเป็น Meet the Coach ซ่อนฟอร์มลูกค้า
-                    if (tabId !== 'meet-coach') {
-                        document.getElementById('customer-form').style.display = 'none';
-                    }
-                });
-            });
-            
-            // ตั้งค่าแท็บย่อยในแดชบอร์ด
-            const subTabs = document.querySelectorAll('.tab');
-            subTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const subTabId = this.getAttribute('data-subtab');
-                    
-                    // อัพเดทสถานะ active
-                    subTabs.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // แสดงเนื้อหาแท็บย่อยที่เลือก
-                    document.querySelectorAll('.subtab-content').forEach(content => {
-                        content.classList.remove('active');
-                    });
-                    document.getElementById(subTabId).classList.add('active');
-                });
-            });
-            
-            // การจัดการการคลิกการ์ดโค้ช
-            const coachCards = document.querySelectorAll('.coach-card');
-            coachCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    const coachId = this.getAttribute('data-coach');
-                    document.getElementById('customer-form').style.display = 'block';
-                    
-                    // กรอกข้อมูลโค้ชที่เลือกในฟอร์มอัตโนมัติ
-                    const coachRegion = this.querySelector('.coach-region').textContent;
-                    document.getElementById('coachRegion').value = coachRegion.replace('Region ', 'RH');
-                    
-                    // เลื่อนไปที่ฟอร์ม
-                    document.getElementById('customer-form').scrollIntoView({ behavior: 'smooth' });
-                });
-            });
-        }
-
-        // ฟังก์ชันจัดการฟอร์ม
-        function initForms() {
-            // ฟอร์มข้อมูลลูกค้า
-            document.getElementById('customerDataForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // สร้าง Customer ID
-                const now = new Date();
-                const customerId = 'C' + now.getFullYear() + 
-                                  String(now.getMonth()+1).padStart(2, '0') + 
-                                  String(now.getDate()).padStart(2, '0') + 
-                                  String(now.getHours()).padStart(2, '0') + 
-                                  String(now.getMinutes()).padStart(2, '0') + 
-                                  String(now.getSeconds()).padStart(2, '0');
-                
-                // บันทึกข้อมูล
-                const customerData = {
-                    id: customerId,
-                    employeeName: document.getElementById('employeeName').value,
-                    customerName: document.getElementById('customerName').value,
-                    customerDetails: document.getElementById('customerDetails').value,
-                    region: document.getElementById('coachRegion').value,
-                    timestamp: now.toISOString(),
-                    status: 'pending'
-                };
-                
-                // บันทึกลง Local Storage
-                saveCustomerData(customerData);
-                
-                // แจ้งเตือนสำเร็จ
-                alert(`บันทึกข้อมูลสำเร็จ! รหัสลูกค้าของคุณคือ: ${customerId}`);
-                
-                // รีเซ็ตฟอร์ม
-                this.reset();
-            });
-            
-            // ฟอร์มคำถาม
-            document.getElementById('submitQuestion').addEventListener('click', function() {
-                const employeeName = document.getElementById('employeeNameQ').value || 'ผู้ใช้ไม่ระบุชื่อ';
-                const questionType = document.getElementById('questionType').value;
-                const questionText = document.getElementById('questionText').value;
-                
-                if (!questionText) {
-                    alert('กรุณากรอกข้อความคำถามหรือ feedback');
-                    return;
-                }
-                
-                // สร้าง Question ID
-                const now = new Date();
-                const questionId = 'Q' + now.getFullYear() + 
-                                  String(now.getMonth()+1).padStart(2, '0') + 
-                                  String(now.getDate()).padStart(2, '0') + 
-                                  String(now.getHours()).padStart(2, '0') + 
-                                  String(now.getMinutes()).padStart(2, '0') + 
-                                  String(now.getSeconds()).padStart(2, '0');
-                
-                // บันทึกข้อมูลคำถาม
-                const questionData = {
-                    id: questionId,
-                    employeeName: employeeName,
-                    type: questionType,
-                    question: questionText,
-                    timestamp: now.toISOString(),
-                    status: 'pending',
-                    answer: '',
-                    answeredBy: ''
-                };
-                
-                // บันทึกลง Local Storage
-                saveQuestionData(questionData);
-                
-                // แจ้งเตือนสำเร็จ
-                alert('ส่งคำถามสำเร็จ! คำถามของคุณกำลังรอการอนุมัติ');
-                
-                // รีเซ็ตฟอร์ม
-                document.getElementById('questionText').value = '';
-            });
-            
-            // ระบบค้นหา
-            document.getElementById('searchInput').addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
-                performSearch(searchTerm);
-            });
-        }
-
-        // ฟังก์ชันบันทึกข้อมูลลูกค้า
-        function saveCustomerData(customerData) {
-            let customers = JSON.parse(localStorage.getItem('meetTheCoach_customers')) || [];
-            customers.push(customerData);
-            localStorage.setItem('meetTheCoach_customers', JSON.stringify(customers));
-        }
-
-        // ฟังก์ชันบันทึกข้อมูลคำถาม
-        function saveQuestionData(questionData) {
-            let questions = JSON.parse(localStorage.getItem('meetTheCoach_questions')) || [];
-            questions.push(questionData);
-            localStorage.setItem('meetTheCoach_questions', JSON.stringify(questions));
-        }
-
-        // ฟังก์ชันค้นหาข้อมูล
-        function performSearch(searchTerm) {
-            const customers = JSON.parse(localStorage.getItem('meetTheCoach_customers')) || [];
-            const resultsContainer = document.getElementById('searchResults');
-            
-            if (!searchTerm) {
-                resultsContainer.innerHTML = '<p>กรุณากรอกคำค้นหา</p>';
-                return;
-            }
-            
-            const filteredCustomers = customers.filter(customer => 
-                customer.customerName.toLowerCase().includes(searchTerm) || 
-                customer.id.toLowerCase().includes(searchTerm) ||
-                customer.employeeName.toLowerCase().includes(searchTerm)
-            );
-            
-            if (filteredCustomers.length === 0) {
-                resultsContainer.innerHTML = '<p>ไม่พบข้อมูลที่ตรงกับการค้นหา</p>';
-                return;
-            }
-            
-            let resultsHTML = '';
-            filteredCustomers.forEach(customer => {
-                resultsHTML += `
-                    <div class="post-card">
-                        <div class="post-header">
-                            <div class="post-avatar">${customer.employeeName.charAt(0)}</div>
-                            <div>
-                                <div class="post-user">${customer.employeeName}</div>
-                                <div class="post-time">${new Date(customer.timestamp).toLocaleString('th-TH')}</div>
-                            </div>
-                        </div>
-                        <div class="post-content">
-                            <p><strong>รหัสลูกค้า:</strong> ${customer.id}</p>
-                            <p><strong>ชื่อลูกค้า:</strong> ${customer.customerName}</p>
-                            <p><strong>ภูมิภาค:</strong> ${customer.region}</p>
-                            <p><strong>รายละเอียด:</strong> ${customer.customerDetails}</p>
-                            <p><strong>สถานะ:</strong> ${customer.status === 'pending' ? 'รอดำเนินการ' : 'เสร็จสิ้น'}</p>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            resultsContainer.innerHTML = resultsHTML;
-        }
-
-        // โหลดข้อมูลตัวอย่างเมื่อเริ่มต้น (สำหรับการทดสอบ)
-        function loadSampleData() {
-            if (!localStorage.getItem('meetTheCoach_customers')) {
-                localStorage.setItem('meetTheCoach_customers', JSON.stringify(sampleData.customers));
-            }
-            
-            if (!localStorage.getItem('meetTheCoach_questions')) {
-                localStorage.setItem('meetTheCoach_questions', JSON.stringify(sampleData.questions));
-            }
-            
-            if (!localStorage.getItem('meetTheCoach_coaches')) {
-                localStorage.setItem('meetTheCoach_coaches', JSON.stringify(sampleData.coaches));
-            }
-        }
-
-        // เริ่มต้นการทำงานเมื่อโหลดหน้าเว็บ
+        // Initialize Charts
         document.addEventListener('DOMContentLoaded', function() {
-            loadSampleData();
-            initTabs();
-            initForms();
+            // Performance Chart (Bar Chart)
+            const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+            const performanceChart = new Chart(performanceCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['RH1', 'RH2', 'RH3', 'RH4', 'RH5'],
+                    datasets: [
+                        {
+                            label: 'ประสิทธิภาพ',
+                            data: [85, 78, 82, 88, 95],
+                            backgroundColor: [
+                                'rgba(0, 255, 255, 0.7)',
+                                'rgba(0, 255, 0, 0.7)',
+                                'rgba(255, 0, 255, 0.7)',
+                                'rgba(0, 150, 255, 0.7)',
+                                'rgba(255, 255, 0, 0.7)'
+                            ],
+                            borderColor: [
+                                'rgba(0, 255, 255, 1)',
+                                'rgba(0, 255, 0, 1)',
+                                'rgba(255, 0, 255, 1)',
+                                'rgba(0, 150, 255, 1)',
+                                'rgba(255, 255, 0, 1)'
+                            ],
+                            borderWidth: 1,
+                            borderRadius: 5
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(26, 26, 26, 0.8)',
+                            titleColor: '#00FFFF',
+                            bodyColor: '#FFFFFF',
+                            borderColor: '#00FFFF',
+                            borderWidth: 1
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#B0B0B0'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#B0B0B0'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Distribution Chart (Doughnut Chart)
+            const distributionCtx = document.getElementById('distributionChart').getContext('2d');
+            const distributionChart = new Chart(distributionCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['RH1', 'RH2', 'RH3', 'RH4', 'RH5'],
+                    datasets: [{
+                        data: [28, 22, 18, 24, 26],
+                        backgroundColor: [
+                            'rgba(0, 255, 255, 0.7)',
+                            'rgba(0, 255, 0, 0.7)',
+                            'rgba(255, 0, 255, 0.7)',
+                            'rgba(0, 150, 255, 0.7)',
+                            'rgba(255, 255, 0, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(0, 255, 255, 1)',
+                            'rgba(0, 255, 0, 1)',
+                            'rgba(255, 0, 255, 1)',
+                            'rgba(0, 150, 255, 1)',
+                            'rgba(255, 255, 0, 1)'
+                        ],
+                        borderWidth: 1,
+                        hoverOffset: 15
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#B0B0B0',
+                                padding: 20,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(26, 26, 26, 0.8)',
+                            titleColor: '#00FFFF',
+                            bodyColor: '#FFFFFF',
+                            borderColor: '#00FFFF',
+                            borderWidth: 1
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+
+            // Success Rate Chart (Radar Chart)
+            const successRateCtx = document.getElementById('successRateChart').getContext('2d');
+            const successRateChart = new Chart(successRateCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['BM', 'CISA', 'CFSA', 'Other', 'F2F', 'Online'],
+                    datasets: [{
+                        label: 'อัตราความสำเร็จ',
+                        data: [92, 88, 85, 79, 90, 86],
+                        backgroundColor: 'rgba(0, 255, 255, 0.2)',
+                        borderColor: 'rgba(0, 255, 255, 1)',
+                        pointBackgroundColor: 'rgba(0, 255, 255, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(0, 255, 255, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            pointLabels: {
+                                color: '#B0B0B0'
+                            },
+                            ticks: {
+                                color: '#B0B0B0',
+                                backdropColor: 'transparent'
+                            },
+                            min: 70,
+                            max: 100
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(26, 26, 26, 0.8)',
+                            titleColor: '#00FFFF',
+                            bodyColor: '#FFFFFF',
+                            borderColor: '#00FFFF',
+                            borderWidth: 1
+                        }
+                    }
+                }
+            });
+
+            // Growth Chart (Line Chart)
+            const growthCtx = document.getElementById('growthChart').getContext('2d');
+            const growthChart = new Chart(growthCtx, {
+                type: 'line',
+                data: {
+                    labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.'],
+                    datasets: [{
+                        label: 'ผู้เข้าร่วม',
+                        data: [120, 150, 180, 210, 240, 280],
+                        borderColor: 'rgba(0, 255, 0, 1)',
+                        backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }, {
+                        label: 'เซสชัน',
+                        data: [60, 65, 70, 75, 80, 86],
+                        borderColor: 'rgba(0, 255, 255, 1)',
+                        backgroundColor: 'rgba(0, 255, 255, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#B0B0B0'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#B0B0B0'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            backgroundColor: 'rgba(26, 26, 26, 0.8)',
+                            titleColor: '#00FFFF',
+                            bodyColor: '#FFFFFF',
+                            borderColor: '#00FFFF',
+                            borderWidth: 1
+                        }
+                    }
+                }
+            });
+
+            // Add interactive effects
+            const statCards = document.querySelectorAll('.stat-card');
+            statCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.boxShadow = '0 8px 20px rgba(0, 255, 255, 0.2)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
+                });
+            });
+
+            // Add navigation functionality
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
         });
     </script>
 </body>
